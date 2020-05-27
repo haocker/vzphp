@@ -1,0 +1,6 @@
+location / {
+if (!-e $request_filename) {
+rewrite ^(.*)$ /index.php?v=$1 last;
+break;
+}
+}
