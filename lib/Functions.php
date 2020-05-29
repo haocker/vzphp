@@ -22,11 +22,9 @@ function curl_get($url,$cookies='',$headers=[]){
     curl_setopt($ch,CURLOPT_TIMEOUT,30);
     curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.104 Mobile Safari/537.36');
     $temp = curl_exec($ch);
-    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == '200') {
-        $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-        $header = substr($temp, 0, $headerSize);
-        $body = substr($temp, $headerSize);
-    }
+    $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    $header = substr($temp, 0, $headerSize);
+    $body = substr($temp, $headerSize);
     curl_close($ch);
     $result = ['header'=>$header,'body'=>$body];
     return $result;
@@ -44,17 +42,15 @@ function curl_post($url,$data,$cookies='',$headers=[]){
     curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,1);
     curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
     curl_setopt($ch,CURLOPT_FOLLOWLOCATION,1);
-    curl_setopt($ch,CURLOPT_HEADER,0);
+    curl_setopt($ch,CURLOPT_HEADER,1);
     curl_setopt($ch,CURLOPT_TIMEOUT,30);
     curl_setopt($ch,CURLOPT_POST,1);
     curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
     curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.104 Mobile Safari/537.36');
     $temp = curl_exec($ch);
-    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == '200') {
-        $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-        $header = substr($temp, 0, $headerSize);
-        $body = substr($temp, $headerSize);
-    }
+    $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    $header = substr($temp, 0, $headerSize);
+    $body = substr($temp, $headerSize);
     curl_close($ch);
     $result = ['header'=>$header,'body'=>$body];
     return $result;
@@ -115,4 +111,13 @@ function load($file){
     if (file_exists($path)){
         require $path;
     }
+}
+function ext($file){
+    $path = EXT_PATH.$file;
+    if (file_exists($path)){
+        require $path;
+    }
+}
+function postData(){
+    return file_get_contents("php://input");
 }

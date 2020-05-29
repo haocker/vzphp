@@ -3,6 +3,7 @@ require './lib/Functions.php';
 require './lib/Api.php';
 require './lib/View.php';
 require './lib/Mysql.php';
+define('EXT_PATH','./ext/');
 function vz_init(){
     if (URL_MODEL=='1'){
         $module = get('m')!=''?get('m'):DEFAULT_APP;
