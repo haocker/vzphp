@@ -56,7 +56,11 @@ function curl_post($url,$data,$cookies='',$headers=[]){
     return $result;
 }
 function db($table){
-    $db_config = require MODULE_PATH.'config/db.php';
+    $file = MODULE_PATH.'config/db.php';
+    if (!file_exists($file)){
+        return null;
+    }
+    $db_config = require $file;
     $conn = new Mysql($db_config);
     $conn->table($table);
     return $conn;
@@ -120,4 +124,24 @@ function ext($file){
 }
 function postData(){
     return file_get_contents("php://input");
+}
+function cfg($key=''){
+    $file = MODULE_PATH.'config/cfg.php';
+    if (!file_exists($file)){
+      return null;
+    }
+    $cfg = require $file;
+    if ($key!=''){
+        return $cfg[$key];
+    }else{
+        return $cfg;
+    }
+}
+function session($k,$v=null){
+    if($v!=null){
+        $_SESSION[$k] = $v;
+    }else{
+        $result = isset($_SESSION[$k])?$_SESSION[$k]:null;
+        return $result;
+    }
 }

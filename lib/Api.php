@@ -10,9 +10,11 @@ class Api
     function success($data){
         $result = ['success'=>true,'data'=>$data];
         echo json_encode($result);
+        exit;
     }
     function error($msg){
         $result = ['success'=>false,'msg'=>$msg];
         echo json_encode($result);
+        exit;
     }
 }
