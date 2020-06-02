@@ -90,7 +90,7 @@ class Mysql
         return mysqli_query($this->conn,$this->sql);
     }
     function find(){
-        $this->sql = "select {$this->fields} from {$this->table} where {$this->where}";
+        $this->sql = "select {$this->fields} from {$this->table} where {$this->where} {$this->orderBy} {$this->limit}";
         if ($this->echo){
             return $this->sql;
         }
@@ -102,7 +102,7 @@ class Mysql
         }
     }
     function all(){
-        $this->sql = "select {$this->fields} from {$this->table} where {$this->where} {$this->limit} {$this->orderBy}";
+        $this->sql = "select {$this->fields} from {$this->table} where {$this->where} {$this->orderBy} {$this->limit}";
         if ($this->echo){
             return $this->sql;
         }
