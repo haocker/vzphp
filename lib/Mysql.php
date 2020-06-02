@@ -9,6 +9,8 @@ class Mysql
     private $limit = '';
     private $orderBy = '';
     private $fields = '*';
+    private $echo = false;
+    private $sql = '';
     public function __construct($config)
     {
 
@@ -26,6 +28,10 @@ class Mysql
     }
     function trans(){
         mysqli_autocommit($this->conn,FALSE);
+        return $this;
+    }
+    function sql($echo = true){
+        $this->echo = $echo;
         return $this;
     }
     function commit(){
@@ -46,12 +52,12 @@ class Mysql
         $this->fields = $fields;
         return $this;
     }
-    function desc(){
-        $this->orderBy = 'order by desc';
+    function desc($key){
+        $this->orderBy = "order by {$key} desc";
         return $this;
     }
-    function asc(){
-        $this->orderBy = 'order by asc';
+    function asc($key){
+        $this->orderBy = "order by {$key} asc";
         return $this;
     }
     function limit($pageNo = 1,$pageSize = 10){
@@ -70,13 +76,25 @@ class Mysql
             $item = mysqli_real_escape_string($this->conn,$item);
         }
         $values = implode('\',\'',$values);
-        return mysqli_query($this->conn,"insert into {$this->table}({$keys}) values('{$values}')");
+        $this->sql = "insert into {$this->table}({$keys}) values('{$values}')";
+        if ($this->echo){
+            return $this->sql;
+        }
+        return mysqli_query($this->conn,$this->sql);
     }
     function delete(){
-        return mysqli_query($this->conn,"delete from {$this->table} where {$this->where}");
+        $this->sql = "delete from {$this->table} where {$this->where}";
+        if ($this->echo){
+            return $this->sql;
+        }
+        return mysqli_query($this->conn,$this->sql);
     }
     function find(){
-        $result = mysqli_query($this->conn,"select {$this->fields} from {$this->table} where {$this->where}");
+        $this->sql = "select {$this->fields} from {$this->table} where {$this->where}";
+        if ($this->echo){
+            return $this->sql;
+        }
+        $result = mysqli_query($this->conn,$this->sql);
         if($result->num_rows>0){
             return $result->fetch_array();
         }else{
@@ -84,7 +102,11 @@ class Mysql
         }
     }
     function all(){
-        $result = mysqli_query($this->conn,"select {$this->fields} from {$this->table} where {$this->where} {$this->limit} {$this->orderBy}");
+        $this->sql = "select {$this->fields} from {$this->table} where {$this->where} {$this->limit} {$this->orderBy}";
+        if ($this->echo){
+            return $this->sql;
+        }
+        $result = mysqli_query($this->conn,$this->sql);
         if($result->num_rows>0){
             $arr = [];
             while ($tmp = $result->fetch_array()){
@@ -102,7 +124,11 @@ class Mysql
             array_push($set,"{$k}='{$value}'");
         }
         $set = implode(',',$set);
-        return mysqli_query($this->conn,"update {$this->table} set {$set} where {$this->where}");
+        $this->sql = "update {$this->table} set {$set} where {$this->where}";
+        if ($this->echo){
+            return $this->sql;
+        }
+        return mysqli_query($this->conn,$this->sql);
     }
     function query($sql){
         return mysqli_query($this->conn,$sql);
