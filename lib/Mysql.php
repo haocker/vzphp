@@ -6,6 +6,8 @@ class Mysql
     private $where = '';
     private $data = [];
     private $table = '';
+    private $limit = '';
+    private $orderBy = '';
     private $fields = '*';
     public function __construct($config)
     {
@@ -42,6 +44,20 @@ class Mysql
     }
     function fields($fields = '*'){
         $this->fields = $fields;
+        return $this;
+    }
+    function desc(){
+        $this->orderBy = 'order by desc';
+        return $this;
+    }
+    function asc(){
+        $this->orderBy = 'order by asc';
+        return $this;
+    }
+    function limit($pageNo = 1,$pageSize = 10){
+        $start = ($pageNo-1)*$pageSize;
+        $this->limit = "limit {$start},{$pageSize}";
+        return $this;
     }
     function data($data = []){
         $this->data = $data;
@@ -68,7 +84,7 @@ class Mysql
         }
     }
     function all(){
-        $result = mysqli_query($this->conn,"select {$this->fields} from {$this->table} where {$this->where}");
+        $result = mysqli_query($this->conn,"select {$this->fields} from {$this->table} where {$this->where} {$this->limit} {$this->orderBy}");
         if($result->num_rows>0){
             $arr = [];
             while ($tmp = $result->fetch_array()){
