@@ -5,4 +5,5 @@ return array(
     'name'=>'test',
     'user'=>'root',
     'pass'=>'123456',
+    'charset'=>'uft8'
 );

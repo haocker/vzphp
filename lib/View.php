@@ -8,6 +8,7 @@ class View
     private $config = array(
         'suffix' => '.m',      // 设置模板文件的后缀
         'templateDir' => 'template/',    // 设置模板所在的文件夹
+        'theme' => 'default',    // 设置默认模板
         'compileDir' => 'cache/',    // 设置编译后存放的目录
         'cache_html' => true,    // 是否需要编译成静态的HTML文件
         'suffix_cache' => '.html',    // 设置编译文件的后缀
@@ -24,9 +25,9 @@ class View
     private $controlData = array();
     public function __construct($config = array())
     {
-        $this->config['templateDir'] = MODULE_PATH.'view/';
         $this->debug['begin'] = microtime(true);
         $this->config = $config + $this->config;
+        $this->config['templateDir'] = MODULE_PATH.'view/'.$this->config['theme'];
         if (! is_dir($this->config['templateDir'])) {
             exit("模板目录不存在！");
         }
@@ -59,6 +60,8 @@ class View
         }else {
             $this->config[$key] = $value;
         }
+        $this->config['templateDir'] = MODULE_PATH.'view/'.$this->config['theme'];
+        $this->getPath();
     }
     /* 获取当前模板引擎配置，仅供调试使用 */
     public function getConfig($key = null) {

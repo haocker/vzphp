@@ -3,6 +3,7 @@ require './lib/Functions.php';
 require './lib/Api.php';
 require './lib/View.php';
 require './lib/Mysql.php';
+require './vendor/autoload.php';
 define('EXT_PATH','./ext/');
 function vz_init(){
     if (URL_MODEL=='1'){

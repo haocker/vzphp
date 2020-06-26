@@ -19,6 +19,7 @@ class Mysql
         {
             die("连接错误: " . mysqli_connect_error());
         }else{
+            $this->query("SET NAMES {$config['charset']}");
             return $this;
         }
     }
