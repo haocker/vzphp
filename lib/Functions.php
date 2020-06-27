@@ -145,3 +145,21 @@ function session($k,$v=null){
         return $result;
     }
 }
+function cache($path,$v=null){
+    $cacheDir = 'cache/data/';
+    if (!file_exists($cacheDir.$path)){
+        mkdir($cacheDir.$path,0777,true);
+    }
+    if($v!=null){
+        file_put_contents($cacheDir.$path.'/.cache',json_encode($v));
+    }else{
+        $result = file_exists($cacheDir.$path.'/.cache')?json_decode(file_get_contents($cacheDir.$path.'/.cache'),true):null;
+        return $result;
+    }
+}
+function rmCache($path){
+    $cacheDir = 'cache/data/';
+    if (file_exists($cacheDir)){
+        unlink($cacheDir.$path.'/.cache');
+    }
+}

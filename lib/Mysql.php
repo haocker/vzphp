@@ -3,7 +3,7 @@
 
 class Mysql
 {
-    private $where = '';
+    private $where = '1';
     private $data = [];
     private $table = '';
     private $limit = '';

@@ -9,7 +9,7 @@ class View
         'suffix' => '.m',      // 设置模板文件的后缀
         'templateDir' => 'template/',    // 设置模板所在的文件夹
         'theme' => 'default',    // 设置默认模板
-        'compileDir' => 'cache/',    // 设置编译后存放的目录
+        'compileDir' => 'cache/temp/',    // 设置编译后存放的目录
         'cache_html' => true,    // 是否需要编译成静态的HTML文件
         'suffix_cache' => '.html',    // 设置编译文件的后缀
         'cache_time' => 7200,    //  多长时间自动更新，单位秒
