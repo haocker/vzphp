@@ -11,7 +11,7 @@ function vz_init(){
         $controller = get('c')!=''?get('c'):'Index';
         $action = get('a')!=''?get('a'):'index';
     }else{
-        $v = get('v');
+        $v = $_SERVER['PATH_INFO'];
         if($v==''){
             $module = get('m')!=''?get('m'):DEFAULT_APP;
             $controller = get('c')!=''?get('c'):'Index';
@@ -29,7 +29,21 @@ function vz_init(){
                     }
                 }
             }else{
-                die('404');
+                switch (sizeof($urlArr)){
+                    case "3":
+                        $module = DEFAULT_APP;
+                        $controller = $urlArr[1];
+                        $action = $urlArr[2];
+                        break;
+                    case "2":
+                        $module = DEFAULT_APP;
+                        $controller = 'Index';
+                        $action = $urlArr[1];
+                        break;
+                    default:
+                        die('404');
+                }
+
             }
         }
 
@@ -38,8 +52,10 @@ function vz_init(){
     define('_CONTROLLER_',$controller);
     define('_ACTION_',$action);
     $action = '_'.$action;
+
     if(file_exists('./'.APP_ROOT.'/'.$module.'/controller/'.$controller.'.php')){
         define('MODULE_PATH','./'.APP_ROOT.'/'.$module.'/');
+        define('COMMON_PATH','./'.APP_ROOT.'/common/');
         require './'.APP_ROOT.'/'.$module.'/controller/'.$controller.'.php';
         $clazz = new $controller();
         if(method_exists($clazz,$action)){

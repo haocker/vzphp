@@ -21,19 +21,19 @@ class Compile
         }
         // 变量匹配
         // \x7f-\xff表示ASCII字符从127到255，其中\为转义，作用是匹配汉字
-        $this->T_P[] = "#\{\\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}#";
+        $this->T_P[] = "/$this->left\s*\\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\\[\\]\\$\\+\\*\\/\\(\\)]*)\s*$this->right/";
         // foreach标签盘匹配
-        $this->T_P[] = "#\{(loop|foreach)\s+\\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\s*\}#i";
-        $this->T_P[] = "#\{\/(loop|foreach|if)\}#";
-        $this->T_P[] = "#\{([k|v])\}#";
+        $this->T_P[] = "/$this->left\s*(loop|foreach)\s+\\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\s*$this->right/i";
+        $this->T_P[] = "/$this->left\s*\/(loop|foreach|if)\s*$this->right/";
+        $this->T_P[] = "/$this->left\s*([k|v][a-zA-Z0-9_\x7f-\xff\\[\\]\\$\\+\\*\\/\\(\\)]*)\s*$this->right/";
         // if else标签匹配
-        $this->T_P[] = "#\{if (.*?)\}#";
-        $this->T_P[] = "#\{(else if|elseif) (.*?)\}#";
-        $this->T_P[] = "#\{else\}#";
-        $this->T_P[] = "#\{(\#|\*)(.*?)(\#|\*)\}#";
+        $this->T_P[] = "/$this->left\s*if (.*?)\s*$this->right/";
+        $this->T_P[] = "/$this->left\s*(else if|elseif) (.*?)\s*$this->right/";
+        $this->T_P[] = "/$this->left\s*else\s*$this->right/";
+        $this->T_P[] = "/$this->left\s*(\#|\*)(.*?)(\#|\*)\s*$this->right/";
 
-        $this->T_R[] = "<?php echo \$this->value['\\1']; ?>";
-        $this->T_R[] = "<?php foreach ((array)\$this->value['\\2'] as \$k => \$v) { ?>";
+        $this->T_R[] = "<?php echo \$\\1; ?>";
+        $this->T_R[] = "<?php foreach ((array)\$\\2 as \$k => \$v) { ?>";
         $this->T_R[] = "<?php } ?>";
         $this->T_R[] = "<?php echo \$\\1?>";
         $this->T_R[] = "<?php if(\\1){ ?>";

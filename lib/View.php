@@ -104,7 +104,7 @@ class View
      */
     public function reCache($file) {
         $flag = true;
-        $cacheFile = $this->config['compileDir'].md5($file).$this->config['suffix_cache'];
+        $cacheFile = $this->config['compileDir'].md5($this->config['templateDir'].$file).$this->config['suffix_cache'];
         if ($this->config['cache_html'] === true) {
             $timeFlag = (time() - @filemtime($cacheFile)) < $this->config['cache_time'] ? true : false;
             if (is_file($cacheFile) && filesize($cacheFile) > 1 && $timeFlag && filemtime($compileFile) >= filemtime($this->path())) {
@@ -123,8 +123,8 @@ class View
         if (! is_file($this->path())) {
             exit('找不到对应的模板！');
         }
-        $compileFile = $this->config['compileDir'].md5($file).'.php';
-        $cacheFile = $this->config['compileDir'].md5($file).$this->config['suffix_cache'];
+        $compileFile = $this->config['compileDir'].md5($this->config['templateDir'].$file).'.php';
+        $cacheFile = $this->config['compileDir'].md5($this->config['templateDir'].$file).$this->config['suffix_cache'];
         extract($this->value, EXTR_OVERWRITE);
         if ($this->config['cache_html'] === true) { // 开启缓存的处理逻辑
             if ($this->reCache($file) === true) { // 需要更新缓存的处理逻辑

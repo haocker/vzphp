@@ -5,6 +5,9 @@ function get($key){
 function post($key){
     return isset($_POST[$key])?$_POST[$key]:'';
 }
+function upload($key){
+    return isset($_FILES[$key])?$_FILES[$key]:null;
+}
 function curl_get($url,$cookies='',$headers=[]){
     $ch = curl_init();
     if($cookies!=''){
@@ -58,7 +61,10 @@ function curl_post($url,$data,$cookies='',$headers=[]){
 function db($table){
     $file = MODULE_PATH.'config/db.php';
     if (!file_exists($file)){
-        return null;
+        $file = COMMON_PATH.'config/db.php';
+        if (!file_exists($file)){
+            return null;
+        }
     }
     $db_config = require $file;
     $conn = new Mysql($db_config);
@@ -94,7 +100,7 @@ function url($express = '',$param = []){
             }
             break;
         case '2':
-            $url = "/?v={$module}/{$controller}/{$action}";
+            $url = "/index.php/{$module}/{$controller}/{$action}";
             foreach ($param as $k=>$v){
                 $url.="/{$k}/{$v}";
             }
@@ -128,7 +134,7 @@ function postData(){
 function cfg($key=''){
     $file = MODULE_PATH.'config/cfg.php';
     if (!file_exists($file)){
-      return null;
+        return null;
     }
     $cfg = require $file;
     if ($key!=''){

@@ -11,6 +11,7 @@ class Mysql
     private $fields = '*';
     private $echo = false;
     private $sql = '';
+    private $filedKey = '';
     public function __construct($config)
     {
 
@@ -53,12 +54,20 @@ class Mysql
         $this->fields = $fields;
         return $this;
     }
+    function filedKey($key = 'id'){
+        $this->filedKey = $key;
+        return $this;
+    }
     function desc($key){
         $this->orderBy = "order by {$key} desc";
         return $this;
     }
     function asc($key){
         $this->orderBy = "order by {$key} asc";
+        return $this;
+    }
+    function rand(){
+        $this->orderBy = "order by rand()";
         return $this;
     }
     function limit($pageNo = 1,$pageSize = 10){
@@ -111,7 +120,12 @@ class Mysql
         if($result->num_rows>0){
             $arr = [];
             while ($tmp = $result->fetch_array()){
-                array_push($arr,$tmp);
+                if($this->filedKey!=''&&$tmp[$this->filedKey]!=null){
+                    $arr[(string)$tmp[$this->filedKey]] = $tmp;
+                }else{
+                    array_push($arr,$tmp);
+                }
+
             }
             return $arr;
         }else{
